@@ -1,89 +1,77 @@
-:root {
-    --cor-fundo: #0d1117;
-    --cor-card: #161b22;
-    --cor-texto: #c9d1d9;
-    --cor-destaque: #58a6ff;
-    --cor-botao: #238636;
-    --cor-botao-hover: #2ea043;
+import { buscaItemAleatorio, geraNomeAleatorio } from './aleatorio.js';
+import { perguntas } from './perguntas.js';
+
+const caixaPrincipal = document.querySelector(".caixa-principal");
+const caixaPerguntas = document.querySelector(".caixa-perguntas");
+const caixaAlternativas = document.querySelector(".caixa-alternativas");
+const caixaResultado = document.querySelector(".caixa-resultado");
+const textoResultado = document.querySelector(".texto-resultado");
+const botaoIniciar = document.querySelector(".btn-iniciar");
+const botaoJogarNovamente = document.querySelector(".btn-jogar-novamente");
+const telaInicial = document.querySelector(".tela-inicial");
+
+let atual = 0;
+let perguntaAtual;
+let historiaFinal = "";
+let nomePersonagem = "";
+
+botaoIniciar.addEventListener("click", iniciaJogo);
+
+function iniciaJogo() {
+    nomePersonagem = geraNomeAleatorio();
+    telaInicial.classList.add("escondido");
+    caixaPrincipal.classList.remove("escondido");
+    atual = 0;
+    historiaFinal = "";
+    mostraPergunta();
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+function mostraPergunta() {
+    if (atual >= perguntas.length) {
+        exibeResultadoFinal();
+        return;
+    }
+
+    perguntaAtual = buscaItemAleatorio(perguntas);
+    
+    const enunciadoComNome = perguntaAtual.enunciado.replace(/[nome]/g, nomePersonagem);
+    caixaPerguntas.textContent = enunciadoComNome;
+
+    caixaAlternativas.textContent = "";
+    mostraAlternativas();
 }
 
-body {
-    background-color: var(--cor-fundo);
-    color: var(--cor-texto);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
+function mostraAlternativas() {
+    for (const alternativa of perguntaAtual.alternativas) {
+        const botaoAlternativa = document.createElement("button");
+        
+        const textoAlternativa = alternativa.texto.replace(/[nome]/g, nomePersonagem);
+        botaoAlternativa.textContent = textoAlternativa;
+
+        botaoAlternativa.addEventListener("click", () => respostaSelecionada(alternativa));
+        caixaAlternativas.appendChild(botaoAlternativa);
+    }
 }
 
-.container {
-    width: 100%;
-    max-width: 600px;
-    background-color: var(--cor-card);
-    border-radius: 12px;
-    padding: 30px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-    text-align: center;
+function respostaSelecionada(opcaoSelecionada) {
+    const afirmacaoComNome = opcaoSelecionada.afirmacao.replace(/[nome]/g, nomePersonagem);
+    historiaFinal += afirmacaoComNome + " ";
+    atual++;
+    mostraPergunta();
 }
 
-h1 {
-    color: var(--cor-destaque);
-    margin-bottom: 15px;
+function exibeResultadoFinal() {
+    caixaPerguntas.textContent = `Jornada final de ${nomePersonagem}:`;
+    textoResultado.textContent = historiaFinal;
+    caixaAlternativas.textContent = "";
+    caixaResultado.classList.remove("escondido");
+    
+    botaoJogarNovamente.classList.remove("escondido");
+    botaoJogarNovamente.addEventListener("click", reiniciaJogo);
 }
 
-p {
-    margin-bottom: 20px;
-    font-size: 1.1rem;
-    line-height: 1.5;
-}
-
-.caixa-perguntas {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-    min-height: 60px;
-}
-
-.caixa-alternativas {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 20px;
-}
-
-button {
-    background-color: var(--cor-botao);
-    color: #ffffff;
-    border: none;
-    padding: 12px 20px;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-button:hover {
-    background-color: var(--cor-botao-hover);
-    transform: translateY(-2px);
-}
-
-.escondido {
-    display: none !important;
-}
-
-.texto-resultado {
-    background-color: rgba(255, 255, 255, 0.05);
-    padding: 15px;
-    border-radius: 8px;
-    border-left: 4px solid var(--cor-destaque);
-    text-align: left;
+function reiniciaJogo() {
+    caixaResultado.classList.add("escondido");
+    botaoJogarNovamente.classList.add("escondido");
+    iniciaJogo();
 }
