@@ -1,29 +1,41 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projeto Start Alura</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Missão Start</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <main class="container">
-        <div class="tela-inicial">
-            <h1>Missão Interativa</h1>
-            <p>Descubra o impacto da inteligência artificial na sua jornada!</p>
-            <button class="btn-iniciar">Iniciar Jogo</button>
-        </div>
 
-        <div class="caixa-principal escondido">
-            <div class="caixa-perguntas"></div>
-            <div class="caixa-alternativas"></div>
-            <div class="caixa-resultado escondido">
-                <p class="texto-resultado"></p>
-                <button class="btn-jogar-novamente escondido">Jogar Novamente</button>
-            </div>
-        </div>
-    </main>
+  <main class="container">
+    <h1>🚀 Missão Start</h1>
 
-    <script type="module" src="script.js"></script>
+    <p id="mensagem">
+      Prepare-se para começar sua missão!
+    </p>
+
+    <div class="cartao">
+      <p id="afirmacao">
+        Sua próxima aventura começa aqui.
+      </p>
+    </div>
+
+    <p id="etapa">Pronto para começar?</p>
+
+    <div class="botoes">
+      <button id="iniciar">Iniciar missão</button>
+
+      <button id="avancar" class="escondido">
+        Próxima etapa
+      </button>
+
+      <button id="reiniciar" class="escondido">
+        Jogar novamente
+      </button>
+    </div>
+  </main>
+
+  <script type="module" src="js/jogo.js"></script>
 </body>
 </html>
